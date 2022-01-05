@@ -33,8 +33,8 @@ app.get('/messages', async (req, res, next) => {
 app.post('/messages', async (req, res, next) => {
     try {
         const validate = database.getSchema('message').validate(req.body, true);
-        const message = validate.objects;
-        const response = await database.get('messages').create({ ...message });
+        const message = validate.object;
+        const response = await database.get('messages').create(message);
         res.json(response);
     } catch (error) {
         console.log('Error: ', error);
