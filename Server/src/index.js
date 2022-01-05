@@ -9,24 +9,7 @@ const { Database } = require('@jodu555/mysqlapi');
 
 const database = Database.createDatabase('localhost', 'root', '', 'rt-chat');
 database.connect();
-
-database.createTable('messages', {
-    options: {
-        //Enables softdelete
-        softdelete: true,
-        //Enable all available timestamps
-        timestamps: true,
-        K: ['name']
-    },
-    'name': {
-        type: 'varchar(64)',
-        null: false,
-    },
-    'name': {
-        type: 'Text',
-        null: false,
-    },
-});
+require('./utils/database')();
 
 const app = express();
 app.use(cors());
@@ -38,16 +21,28 @@ app.get('/', (req, res) => {
     res.json({ message: 'Working API' })
 });
 
-app.get('/messages', async (req, res) => {
-
+app.get('/messages', async (req, res, next) => {
+    try {
+        const response = database.get('messages').get();
+        res.json(response);
+    } catch (error) {
+        next(error)
+    }
 });
 
-app.post('/messages', (req, res) => {
+app.post('/messages', (req, res, next) => {
+    try {
+        const validate = database.getSchema('message').validate(req.body, true);
+        const message = validate.objects;
 
+        database.get('messages').create(message);
+    } catch (error) {
+        next(error);
+    }
 });
 
 app.use((err, req, res, next) => {
-    res.json(error);
+    res.json(err);
 })
 
 app.use((req, res) => {
