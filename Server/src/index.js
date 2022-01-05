@@ -5,13 +5,38 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const dotenv = require('dotenv').config();
 
+const { Database } = require('@jodu555/mysqlapi');
+
+const database = Database.createDatabase('localhost', 'root', '', 'rt-chat');
+database.connect();
+
+database.createTable('messages', {
+    options: {
+        //Enables softdelete
+        softdelete: true,
+        //Enable all available timestamps
+        timestamps: true,
+        K: ['name']
+    },
+    'name': {
+        type: 'varchar(64)',
+        null: false,
+    },
+    'name': {
+        type: 'Text',
+        null: false,
+    },
+});
+
 const app = express();
 app.use(cors());
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(express.json());
 
-
+app.get('/', (req, res) => {
+    res.json({ message: 'Working API' })
+});
 
 
 const PORT = process.env.PORT || 3100;
