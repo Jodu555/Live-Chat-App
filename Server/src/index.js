@@ -38,6 +38,22 @@ app.get('/', (req, res) => {
     res.json({ message: 'Working API' })
 });
 
+app.get('/messages', async (req, res) => {
+
+});
+
+app.post('/messages', (req, res) => {
+
+});
+
+app.use((err, req, res, next) => {
+    res.json(error);
+})
+
+app.use((req, res) => {
+    res.json({ message: 'NotFound' })
+});
+
 
 const PORT = process.env.PORT || 3100;
 if (process.env.https) {
