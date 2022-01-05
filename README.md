@@ -10,8 +10,13 @@ and generally how to handle these kind of Realtime stuff
 * [ ] Backend:
     * [ ] Get MySql working
     * [ ] Get Socket.io working
-    * [ ] Get Messages rout
-    * []
+    * [ ] Get Messages route
+    * [ ] Handle Messaging
+* [ ] Frontend:
+    * [ ] Get Vue working
+    * [ ] Prompt name enter form
+    * [ ] Display old Chat
+    * [ ] Get Socket.io working
 
 ## Tech Stack
 * Frontend
