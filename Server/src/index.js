@@ -1,4 +1,6 @@
+const http = require('http');
 const express = require('express');
+const { Server } = require("socket.io");
 const https = require('https');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -61,7 +63,16 @@ if (process.env.https) {
         console.log(`Express App Listening with SSL on ${PORT}`);
     });
 } else {
-    app.listen(PORT, async () => {
+    const server = http.createServer(app).listen(PORT, async () => {
         console.log(`Express App Listening on ${PORT}`);
+    });;
+    const io = new Server(server, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"]
+        }
+    });
+    io.on("connection", (socket) => {
+        console.log('Connection');
     });
 }

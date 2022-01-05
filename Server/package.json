@@ -17,6 +17,7 @@
 		"express": "^4.17.2",
 		"helmet": "^5.0.1",
 		"morgan": "^1.10.0",
-		"nodemon": "^2.0.15"
+		"nodemon": "^2.0.15",
+		"socket.io": "^4.4.0"
 	}
 }
