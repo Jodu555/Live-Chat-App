@@ -19,6 +19,8 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(express.json());
 
+
+
 let server;
 if (process.env.https) {
     const sslProperties = {
@@ -31,6 +33,7 @@ if (process.env.https) {
 }
 
 let actionbar = '';
+const typer = {};
 
 const io = new Server(server, {
     cors: {
@@ -53,14 +56,30 @@ io.on("connection", (socket) => {
     socket.on('action', (data) => {
         if (data.type == 'typing') {
             if (data.info == 'started') {
-
+                typer[data.name] = true;
+                calcAndSendActionbar();
             }
             if (data.info == 'stopped') {
-
+                delete typer[data.name];
+                calcAndSendActionbar();
             }
         }
     })
 });
+
+function calcAndSendActionbar() {
+    let actionbar = '';
+    if (Object.keys(typer).length == 0) {
+        io.emit('actionbar', '');
+        return;
+    }
+    Object.keys(typer).forEach(name => {
+        actionbar += name + ', ';
+    });
+
+    actionbar += ' is currently typing';
+    io.emit('actionbar', actionbar);
+}
 
 
 app.get('/', (req, res) => {

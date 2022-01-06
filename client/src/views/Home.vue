@@ -70,12 +70,12 @@ export default {
 				const time = Date.now();
 				this.lastTyping = time;
 				this.isTyping = true;
-				this.socket.emit('action', { type: 'typing', info: 'started' });
+				this.socket.emit('action', { type: 'typing', info: 'started', name: this.name });
 				setTimeout(() => {
 					if (this.lastTyping == time) {
 						this.isTyping = false;
 						this.lastTyping = null;
-						this.socket.emit('action', { type: 'typing', info: 'stopped' });
+						this.socket.emit('action', { type: 'typing', info: 'stopped', name: this.name });
 					}
 				}, 2000);
 			}
