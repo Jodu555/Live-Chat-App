@@ -8,16 +8,16 @@
 				</p>
 			</div>
 			<br />
-			<div class="row" style="width: 100%">
-				<div class="col-9">
-					<input v-model="message" style="width: 100%" type="text" placeholder="Your Message" />
+			<form @submit.prevent="sendMessage">
+				<div class="row" style="width: 100%">
+					<div class="col-9">
+						<input v-model="message" style="width: 100%" type="text" placeholder="Your Message" />
+					</div>
+					<div class="col-3">
+						<button class="btn btn-outline-primary" style="width: 100%">Send</button>
+					</div>
 				</div>
-				<div class="col-3">
-					<button @click="sendMessage()" class="btn btn-outline-primary" style="width: 100%">
-						Send
-					</button>
-				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </template>
@@ -42,8 +42,8 @@ export default {
 		...mapActions(['loadMessages']),
 		...mapMutations(['appendMessage']),
 		sendMessage() {
-			console.log(this.socket);
 			this.socket.emit('newMessage', { name: this.$store.state.name, message: this.message });
+			this.message = '';
 		},
 	},
 	computed: {

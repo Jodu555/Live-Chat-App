@@ -58,7 +58,8 @@ app.get('/', (req, res) => {
 
 app.get('/messages', async (req, res, next) => {
     try {
-        const response = await database.get('messages').get();
+        let response = await database.get('messages').get();
+        response = response.sort((a, b) => b.created_at - a.created_at);
         res.json(response);
     } catch (error) {
         next(error)

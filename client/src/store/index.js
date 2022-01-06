@@ -22,9 +22,9 @@ export default createStore({
   actions: {
     loadMessages: async ({ commit }, message) => {
       const response = await fetch('http://localhost:3100/messages');
-      const json = await response.json();
-      console.log(json);
-      // commit('appendMessages', )
+      let json = await response.json();
+      json = json.reverse();
+      commit('appendMessages', json);
     },
   },
   modules: {
