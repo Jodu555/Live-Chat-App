@@ -13,7 +13,13 @@
 			<form @submit.prevent="sendMessage">
 				<div class="row" style="width: 100%">
 					<div class="col-9">
-						<input v-model="message" style="width: 100%" type="text" placeholder="Your Message" />
+						<input
+							v-model="message"
+							@input="typing"
+							style="width: 100%"
+							type="text"
+							placeholder="Your Message"
+						/>
 					</div>
 					<div class="col-3">
 						<button class="btn btn-outline-primary" style="width: 100%">Send</button>
@@ -31,7 +37,13 @@ const { io } = require('socket.io-client');
 export default {
 	name: 'Home',
 	data() {
-		return { socket: null, message: '', actionbar: '' };
+		return {
+			socket: null,
+			message: '',
+			actionbar: '',
+			isTyping: false,
+			lastTyping: null,
+		};
 	},
 	created() {
 		this.socket = io('http://localhost:3100');
@@ -49,6 +61,21 @@ export default {
 		sendMessage() {
 			this.socket.emit('newMessage', { name: this.$store.state.name, message: this.message });
 			this.message = '';
+		},
+		typing() {
+			if (!this.isTyping) {
+				const time = Date.now();
+				this.lastTyping = time;
+				this.isTyping = true;
+				this.socket.emit('action', { type: 'typing', info: 'started' });
+				setTimeout(() => {
+					if (this.lastTyping == time) {
+						this.isTyping = false;
+						this.lastTyping = null;
+						this.socket.emit('action', { type: 'typing', info: 'stopped' });
+					}
+				}, 2000);
+			}
 		},
 	},
 	computed: {
