@@ -14,14 +14,9 @@
 						</div>
 						<div>{{ message.message }}</div>
 					</div>
-					<!-- <div class="chat__message"></div>
-					<div class="chat__message chat__message-own">
-						<div class="date"></div>
-						<div>Message #2</div>
-					</div> -->
 				</div>
-				<small>{{ actionbar }}</small>
 			</div>
+			<small>{{ actionbar }}</small>
 			<div class="chat__form">
 				<form @submit.prevent="sendMessage">
 					<input
@@ -117,7 +112,7 @@ export default {
 .chat {
 	width: 100%;
 	max-width: 800px;
-	height: calc(100vh - 105px);
+	height: calc(100vh - 130px);
 	min-height: 100%;
 	padding: 15px 30px;
 	margin: 0 auto;
