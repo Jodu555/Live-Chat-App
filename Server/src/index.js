@@ -39,7 +39,6 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
     console.log('Connection');
     socket.on('newMessage', async (obj) => {
-        console.log('New Message', obj);
         try {
             const validate = database.getSchema('message').validate(obj, true);
             const message = validate.object;

@@ -8,6 +8,8 @@
 				</p>
 			</div>
 			<br />
+			<small>{{ actionbar }}</small>
+			<br />
 			<form @submit.prevent="sendMessage">
 				<div class="row" style="width: 100%">
 					<div class="col-9">
@@ -29,12 +31,15 @@ const { io } = require('socket.io-client');
 export default {
 	name: 'Home',
 	data() {
-		return { socket: null, message: '' };
+		return { socket: null, message: '', actionbar: '' };
 	},
 	created() {
 		this.socket = io('http://localhost:3100');
 		this.socket.on('newMessage', (message) => {
 			this.appendMessage(message);
+		});
+		this.socket.on('actionbar', (text) => {
+			this.actionbar = text;
 		});
 		this.loadMessages();
 	},
