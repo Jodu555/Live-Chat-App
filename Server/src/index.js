@@ -30,6 +30,8 @@ if (process.env.https) {
     server = http.createServer(app);
 }
 
+let actionbar = '';
+
 const io = new Server(server, {
     cors: {
         origin: "*",
@@ -46,6 +48,16 @@ io.on("connection", (socket) => {
             io.emit('newMessage', message);
         } catch (error) {
             console.log('Error: ', error);
+        }
+    });
+    socket.on('action', (data) => {
+        if (data.type == 'typing') {
+            if (data.info == 'started') {
+
+            }
+            if (data.info == 'stopped') {
+
+            }
         }
     })
 });
