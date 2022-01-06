@@ -19,6 +19,27 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(express.json());
 
+let server;
+if (process.env.https) {
+    const sslProperties = {
+        key: fs.readFileSync(process.env.KEY_FILE),
+        cert: fs.readFileSync(process.env.CERT_FILE),
+    };
+    server = https.createServer(sslProperties, app)
+} else {
+    server = http.createServer(app);
+}
+
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+io.on("connection", (socket) => {
+    console.log('Connection');
+});
+
 app.get('/', (req, res) => {
     res.json({ message: 'Working API' })
 });
@@ -54,25 +75,6 @@ app.use((req, res) => {
 
 
 const PORT = process.env.PORT || 3100;
-if (process.env.https) {
-    const sslProperties = {
-        key: fs.readFileSync(process.env.KEY_FILE),
-        cert: fs.readFileSync(process.env.CERT_FILE),
-    };
-    https.createServer(sslProperties, app).listen(PORT, () => {
-        console.log(`Express App Listening with SSL on ${PORT}`);
-    });
-} else {
-    const server = http.createServer(app).listen(PORT, async () => {
-        console.log(`Express App Listening on ${PORT}`);
-    });;
-    const io = new Server(server, {
-        cors: {
-            origin: "*",
-            methods: ["GET", "POST"]
-        }
-    });
-    io.on("connection", (socket) => {
-        console.log('Connection');
-    });
-}
+server.listen(PORT, () => {
+    console.log(`Express App Listening ${process.env.https ? 'with SSL ' : ''}on ${PORT}`);
+});
