@@ -55,6 +55,9 @@ export default {
 		});
 		this.loadMessages();
 	},
+	unmounted() {
+		this.socket.disconnect();
+	},
 	methods: {
 		...mapActions(['loadMessages']),
 		...mapMutations(['appendMessage']),
