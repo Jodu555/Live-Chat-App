@@ -87,6 +87,7 @@ export default {
 		...mapState(['messages']),
 		name: {
 			get() {
+				console.log(123);
 				return this.$store.state.name;
 			},
 			set(value) {
