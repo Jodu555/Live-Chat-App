@@ -13,9 +13,10 @@ import { Database } from '@jodu555/mysqlapi';
 
 const database = Database.createDatabase('localhost', 'root', '', 'rt-chat');
 database.connect();
-const databaseModule = require('./utils/database');
+// const databaseModule,  { Message} = require('./utils/database');
+import databaseModuleCreate, { Message } from './utils/database';
 // import * as databaseModule from './utils/database';
-databaseModule();
+databaseModuleCreate();
 
 const app = express();
 app.use(cors());
@@ -35,7 +36,7 @@ if (process.env.https) {
 }
 
 let actionbar = '';
-const typer = {};
+const typer: Record<string, Boolean> = {};
 
 const io = new Server(server, {
 	cors: {
@@ -89,7 +90,7 @@ app.get('/', (req, res) => {
 
 app.get('/messages', async (req, res, next) => {
 	try {
-		let response = await database.get('messages').get();
+		let response = await database.get<Message>('messages').get();
 		response = response.sort((a, b) => b.created_at - a.created_at);
 		res.json(response);
 	} catch (error) {
@@ -101,7 +102,7 @@ app.post('/messages', async (req, res, next) => {
 	try {
 		const validate = database.getSchema('message').validate(req.body, true);
 		const message = validate.object;
-		const response = await database.get('messages').create(message);
+		const response = await database.get<Message>('messages').create(message);
 		res.json(response);
 	} catch (error) {
 		console.log('Error: ', error);

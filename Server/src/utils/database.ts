@@ -33,4 +33,13 @@ function create() {
 	database.registerSchema('message', messageSchema, 'messages');
 }
 
-module.exports = create;
+type Message = {
+	name: string;
+	message: string;
+	created_at: number;
+};
+
+export default create;
+export { Message };
+
+// module.exports = create,Message;

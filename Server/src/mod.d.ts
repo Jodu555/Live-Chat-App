@@ -1,12 +1,4 @@
 declare module '@jodu555/mysqlapi' {
-	// export var Database: object {
-	// 	// createDatabase: (host: string, username: string, password: string, database: string) => Object;
-	// }
-	// export interface Database {
-	//     function create: () => any
-	// }
-	// export function createDatabase(host: string, username: string, password: string, database: string): Object;
-
 	interface IOverDatabase {
 		createDatabase: (host: string, username: string, password: string, database: string) => Database;
 		getDatabase: () => Database;
@@ -40,17 +32,27 @@ declare module '@jodu555/mysqlapi' {
 		connect: () => void;
 		createTable: (tablename: string, table: TableObject) => void;
 		registerSchema: (name: string, schema: object, reference_table_name: string) => void;
-		get: (thing: string) => thingDatabase;
-		getSchema: (name: string) => any;
+		get: <X>(thing: string) => thingDatabase<X>;
+		getSchema: (name: string) => Schema;
 	}
 
-	interface thingDatabase {
-		create: (thing: object) => Promise<object>;
+	interface thingDatabase<X> {
+		create: (thing: object) => Promise<X>;
 		update: (search: object, thing: object) => void;
-		getOne: (search: object) => Promise<object>;
-		get: (search?: object) => Promise<[object]>;
+		getOne: (search: object) => Promise<X>;
+		get: (search?: object) => Promise<[X]>;
 		delete: (search: object) => void;
-		getLatest: (action: 'inserted' | 'updated' | 'deleted', search: object) => Promise<object>;
+		getLatest: (action: 'inserted' | 'updated' | 'deleted', search: object) => Promise<X>;
+	}
+
+	type ValidationReturn = {
+		success: Boolean;
+		object: object;
+		errors: Object[];
+	};
+
+	interface Schema {
+		validate: (obj: object, thro: Boolean) => ValidationReturn;
 	}
 
 	export let Database: IOverDatabase;
