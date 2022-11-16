@@ -109,7 +109,19 @@ app.post('/messages', async (req, res, next) => {
 	}
 });
 
-app.use((err, req, res, next) => {
+class HttpException extends Error {
+	status: number;
+	message: string;
+	constructor(status: number, message: string) {
+		super(message);
+		this.status = status;
+		this.message = message;
+	}
+}
+
+import { NextFunction, Request, Response } from 'express';
+
+app.use((err: HttpException, req: Request, res: Response, next: NextFunction) => {
 	res.json(err);
 });
 
