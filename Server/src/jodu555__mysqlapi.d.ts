@@ -23,9 +23,13 @@ declare module '@jodu555/mysqlapi' {
 		null?: Boolean;
 	}
 
-	interface TableObject {
-		options: TableOptions;
-		[key: string]: String | TypeOptions | TableOptions;
+	type TableObject = {
+		options?: TableOptions;
+		[key: string]: string | TypeOptions | TableOptions;
+	};
+
+	interface ITableImplTypes {
+		[key: string]: string | TypeOptions;
 	}
 
 	interface Database {
@@ -38,8 +42,8 @@ declare module '@jodu555/mysqlapi' {
 
 	interface thingDatabase<X> {
 		create: (thing: object) => Promise<X>;
-		update: (search: object, thing: object) => void;
-		getOne: (search: object) => Promise<X>;
+		update: (search: X, thing: X) => void;
+		getOne: (search: X) => Promise<X>;
 		get: (search?: object) => Promise<[X]>;
 		delete: (search: object) => void;
 		getLatest: (action: 'inserted' | 'updated' | 'deleted', search: object) => Promise<X>;

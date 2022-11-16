@@ -34,9 +34,9 @@ function create() {
 }
 
 type Message = {
-	name: string;
-	message: string;
-	created_at: number;
+	name?: string;
+	message?: string;
+	created_at?: number;
 };
 
 export default create;

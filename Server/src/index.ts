@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
 		try {
 			const validate = database.getSchema('message').validate(obj, true);
 			const message = validate.object;
-			await database.get('messages').create(message);
+			await database.get<Message>('messages').create(message);
 			io.emit('newMessage', message);
 		} catch (error) {
 			console.log('Error: ', error);
