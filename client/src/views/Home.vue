@@ -4,14 +4,8 @@
 		<div v-if="name">
 			<div class="chat">
 				<div class="chat__wrapper">
-					<div
-						v-for="message in messages"
-						:key="message.name"
-						:class="{ chat__message: true, 'chat__message-own': message.name == name }"
-					>
-						<div class="date">
-							{{ message.name }} - {{ new Date(Number(message.created_at)).toLocaleTimeString() }}
-						</div>
+					<div v-for="message in messages" :key="message.name" class="chat__message" :class="{ 'chat__message-own': message.name == name }">
+						<div class="date">{{ message.name }} - {{ new Date(Number(message.created_at)).toLocaleTimeString() }}</div>
 						<div>{{ message.message }}</div>
 					</div>
 				</div>
@@ -19,12 +13,7 @@
 			<small>{{ actionbar }}</small>
 			<div class="chat__form">
 				<form @submit.prevent="sendMessage">
-					<input
-						v-model="message"
-						@input="typing"
-						type="text"
-						placeholder="Type your message here ..."
-					/>
+					<input v-model="message" @input="typing" type="text" placeholder="Type your message here ..." />
 					<button type="submit">Send</button>
 				</form>
 			</div>
@@ -113,7 +102,7 @@ export default {
 .chat {
 	width: 100%;
 	max-width: 800px;
-	height: calc(100vh - 130px);
+	height: calc(100vh - 102px);
 	min-height: 100%;
 	padding: 15px 30px;
 	margin: 0 auto;
